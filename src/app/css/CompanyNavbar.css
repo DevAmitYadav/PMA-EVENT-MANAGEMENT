@@ -1,0 +1,8 @@
+.dropdown > button::after {
+    content: "\f0d7";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-left: 0.25rem;
+    font-size: 0.6rem;
+  }
+  
