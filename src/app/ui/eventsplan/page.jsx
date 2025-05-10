@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 const plans = [
@@ -41,12 +42,12 @@ const plans = [
 
 const EventsPlans = () => {
   return (
-    <div className="bg-white py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="bg-[#FAF9F8] py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="text-center">
-        <h2 className="text-4xl font-semibold text-neutral-800 font-[Great_Vibes] italic">
+        <h2 className="text-4xl font-semibold text-[#2C3E50] font-[Great_Vibes] italic">
           Our Events Plans
         </h2>
-        <p className="text-sm text-[#a88f61] tracking-widest mt-1 mb-3 font-semibold">
+        <p className="text-sm text-[#B79E71] tracking-widest mt-1 mb-3 font-semibold">
           PRICES
         </p>
       </div>
@@ -55,7 +56,7 @@ const EventsPlans = () => {
         {plans.map((plan, idx) => (
           <div
             key={idx}
-            className="bg-[#fdf9f5] shadow-lg rounded-lg overflow-hidden transition-transform hover:scale-105"
+            className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform hover:scale-105"
           >
             <img
               src={plan.image}
@@ -63,26 +64,26 @@ const EventsPlans = () => {
               className="w-full h-40 object-cover"
             />
             <div className="text-center px-6 py-8">
-              <h3 className="text-xl text-[#504236] font-[Great_Vibes] italic mb-4">
+              <h3 className="text-xl text-[#2C3E50] font-[Great_Vibes] italic mb-4">
                 {plan.title}
               </h3>
-              <ul className="text-sm text-[#6d645c] space-y-2 mb-6">
+              <ul className="text-sm text-[#2C3E50] space-y-2 mb-6">
                 {plan.features.map((item, i) => (
                   <li
                     key={i}
-                    className="border-b border-[#e5ddd5] pb-1 last:border-none"
+                    className="border-b border-gray-200 pb-1 last:border-none"
                   >
                     {item}
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-[#6d645c] mb-6">
+              <p className="text-sm text-[#2C3E50] mb-6">
                 from{" "}
-                <span className="font-semibold text-neutral-900">
+                <span className="font-semibold text-[#2C3E50]">
                   {plan.price}
                 </span>
               </p>
-              <button className="bg-[#a88f61] hover:bg-[#8b7450] text-white text-xs font-bold tracking-widest py-3 px-8 uppercase rounded-full transition-colors duration-300">
+              <button className="bg-[#2C3E50] hover:bg-[#22374A] text-white text-xs font-bold tracking-widest py-3 px-8 uppercase rounded-full transition-colors duration-300">
                 Order Now
               </button>
             </div>

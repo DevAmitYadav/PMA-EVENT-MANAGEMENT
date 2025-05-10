@@ -2,12 +2,12 @@ import React from 'react';
 
 const Planner = () => {
   return (
-    <div className="bg-white text-zinc-800 min-h-screen font-['Inter']">
+    <div className="bg-[#FAF9F8] text-[#2C3E50] min-h-screen font-['Inter']">
       <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-light mb-3 font-['Great_Vibes'] text-rose-600">
+        <h1 className="text-4xl md:text-5xl font-light mb-3 font-['Great_Vibes'] text-[#2C3E50]">
           Let's Plan Your Perfect Wedding
         </h1>
-        <p className="text-sm text-emerald-500 tracking-widest font-semibold uppercase mb-3">
+        <p className="text-sm text-[#2C3E50] tracking-widest font-semibold uppercase mb-3">
           Welcome
         </p>
 
@@ -30,11 +30,11 @@ const Planner = () => {
             },
           ].map((item, i) => (
             <div key={i}>
-              <div className="border border-zinc-100 shadow-md p-1 rounded-md">
+              <div className="border border-[#ECECEC] shadow-md p-1 rounded-md">
                 <img src={item.img} alt={item.title} className="w-full rounded-sm" />
               </div>
-              <p className="mt-4 text-lg italic text-zinc-600">{item.title}</p>
-              <button className="mt-6 bg-rose-500 hover:bg-rose-600 transition text-white text-xs font-semibold tracking-widest py-3 px-8 rounded-md shadow">
+              <p className="mt-4 text-lg italic text-[#2C3E50]">{item.title}</p>
+              <button className="mt-6 bg-[#2C3E50] hover:bg-[#22374A] transition text-white text-xs font-semibold tracking-widest py-3 px-8 rounded-md shadow">
                 {item.button}
               </button>
             </div>

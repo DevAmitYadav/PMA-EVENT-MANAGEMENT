@@ -58,7 +58,7 @@ const WeddingIntro = () => {
   }, []);
 
   return (
-    <div className="bg-[#f6f5f2] relative min-h-screen overflow-x-hidden">
+    <div className="bg-[#FAF9F8] relative min-h-screen overflow-x-hidden">
       {/* Background Decorative Image */}
       <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none">
         <img
@@ -74,10 +74,10 @@ const WeddingIntro = () => {
       <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative pt-24 pb-[360px] md:pb-[280px] flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-24">
         {/* Text Column */}
         <section className="max-w-xl z-10">
-          <p className="text-xs text-[#b9a98f] font-semibold tracking-widest mb-3 uppercase">
+          <p className="text-xs text-[#2C3E50] font-semibold tracking-widest mb-3 uppercase">
             About Us
           </p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-['Great_Vibes'] leading-tight mb-6 text-[#3a3a3a]">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-['Great_Vibes'] leading-tight mb-6 text-[#2C3E50]">
             We Plan &amp; Design Weddings
             <br />
             That Capture the Imagination
@@ -89,34 +89,52 @@ const WeddingIntro = () => {
             height="20"
             className="mb-6"
           />
-          <p className="text-sm text-[#7a6f6a] leading-relaxed mb-10">
+          <p className="text-sm text-[#2C3E50] leading-relaxed mb-10">
             Weddings are significant events in people’s lives and as such,
-            couples are often willing to spend considerable amount of money to
+            couples are often willing to spend a considerable amount of money to
             ensure that their weddings are well-organized. Wedding planners are
             often used by couples who work long hours and have little spare time
             available for sourcing and managing wedding venues.
           </p>
-          <button className="bg-[#9ca56a] hover:bg-[#8b944e] transition text-white text-xs font-semibold tracking-widest py-4 px-10 uppercase shadow-md rounded-full" type="button">
+          <button
+            className="bg-[#2C3E50] hover:bg-[#22374A] transition text-white text-xs font-semibold tracking-widest py-4 px-10 uppercase shadow-md rounded-full"
+            type="button"
+          >
             More About Us
           </button>
         </section>
 
         {/* Carousel Section */}
-        <section className="relative w-full max-w-md md:max-w-lg lg:max-w-xl border border-white shadow-md overflow-hidden rounded-md z-10" id="carousel">
+        <section
+          className="relative w-full max-w-md md:max-w-lg lg:max-w-xl border border-[#ECECEC] shadow-md overflow-hidden rounded-md z-10"
+          id="carousel"
+        >
           <img
             alt={images[currentIndex].alt}
-            className={`w-full h-auto transition-opacity duration-500 ease-in-out ${fade ? "opacity-0" : "opacity-100"}`}
+            className={`w-full h-auto transition-opacity duration-500 ease-in-out ${
+              fade ? "opacity-0" : "opacity-100"
+            }`}
             height="500"
             loading="lazy"
             src={images[currentIndex].src}
             width="800"
           />
           {/* Navigation Buttons */}
-          <div className="absolute bottom-0 right-0 bg-[#9ca56a] flex items-center justify-center gap-6 px-6 py-4 cursor-pointer select-none">
-            <button aria-label="Previous Image" className="focus:outline-none" type="button" onClick={handlePrevClick}>
+          <div className="absolute bottom-0 right-0 bg-[#2C3E50] flex items-center justify-center gap-6 px-6 py-4 cursor-pointer select-none">
+            <button
+              aria-label="Previous Image"
+              className="focus:outline-none"
+              type="button"
+              onClick={handlePrevClick}
+            >
               <i className="fas fa-chevron-left text-white text-lg"></i>
             </button>
-            <button aria-label="Next Image" className="focus:outline-none" type="button" onClick={handleNextClick}>
+            <button
+              aria-label="Next Image"
+              className="focus:outline-none"
+              type="button"
+              onClick={handleNextClick}
+            >
               <i className="fas fa-chevron-right text-white text-lg"></i>
             </button>
           </div>
