@@ -12,3 +12,4 @@ const enquirySchema = new mongoose.Schema({
 
 const Enquiry = mongoose.models.Enquiry || mongoose.model('Enquiry', enquirySchema);
 export default Enquiry;
+  

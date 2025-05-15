@@ -1,17 +1,19 @@
+"use client";
 import React from "react";
+import Image from "next/image";
 
 const WeddingUpdates = () => {
   const galleryImages = [
-    "https://storage.googleapis.com/a1aa/image/7ead868a-862a-4bae-1762-6fcaeed46131.jpg",
-    "https://storage.googleapis.com/a1aa/image/4301bdd8-a9a4-4d52-4c31-c2cd2d8d8fdf.jpg",
-    "https://storage.googleapis.com/a1aa/image/d6a9272e-6b85-411c-1294-c1d1a634c08d.jpg",
-    "https://storage.googleapis.com/a1aa/image/55707a93-665e-4bf1-47d3-7b61a42a0fa3.jpg",
+    "/frontend/images/weddingUpdates.jpg",
+    "/frontend/images/weddingUpdates2.jpg",
+    "/frontend/images/weddingUpdates3.jpg",
+    "/frontend/images/weddingUpdates4.jpg",
   ];
 
   return (
     <>
-      {/* Header Section */}
-      <div className="bg-[#2C3E50] flex flex-col md:flex-row items-center justify-center gap-6 py-6 px-4 md:px-20">
+      {/* Header Section (currently commented out) */}
+      {/* <div className="bg-[#2C3E50] flex flex-col md:flex-row items-center justify-center gap-6 py-6 px-4 md:px-20">
         <h2 className="text-white font-[Pacifico] text-xl md:text-2xl font-semibold italic whitespace-nowrap">
           Stay Tuned with Updates!
         </h2>
@@ -35,17 +37,23 @@ const WeddingUpdates = () => {
             SUBMIT
           </button>
         </form>
-      </div>
+      </div> */}
 
       {/* Image Gallery */}
       <div className="flex flex-wrap">
         {galleryImages.map((src, idx) => (
-          <img
+          <div
             key={idx}
-            src={src}
-            alt={`Wedding image ${idx + 1}`}
-            className="w-1/2 md:w-1/4 object-cover h-[200px] md:h-[300px]"
-          />
+            className="relative w-1/2 md:w-1/4 h-[200px] md:h-[300px]"
+          >
+            <Image
+              src={src}
+              alt={`Wedding image ${idx + 1}`}
+              fill
+              className="object-cover"
+              priority={idx === 0} // Preload the first image if needed
+            />
+          </div>
         ))}
       </div>
     </>

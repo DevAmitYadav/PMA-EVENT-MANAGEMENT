@@ -4,10 +4,17 @@ import cors from 'cors'; // ✅ Import CORS
 import connectDB from './src/server/db/connect.js';
 import enquiryRoutes from './src/server/routes/enquiryRoutes.js';
 import testimonialRoutes from './src/server/routes/testimonialRoutes.js';
+import eventRoutes from './src/server/routes/eventRoutes.js';
+import newsletterRoutes from './src/server/routes/newsletterRoutes.js';
+import path from 'path'; // ✅ Import path for static file serving
+import { fileURLToPath } from 'url'; // ✅ Import for converting module URL to path
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
+
+// Get current directory path using import.meta.url
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.prepare()
   .then(() => {
@@ -35,12 +42,17 @@ app.prepare()
       })
       .catch((err) => {
         console.error('Failed to connect to MongoDB:', err);
+        process.exit(1); // Exit the process if DB connection fails
       });
 
     // Use the custom routes defined in 'enquiryRoutes.js'
     server.use('/api', enquiryRoutes);
-
     server.use('/api', testimonialRoutes);
+    server.use('/api', eventRoutes); // All event-related routes
+    server.use('/api', newsletterRoutes);
+
+    // Serve images statically
+    server.use('/images', express.static(path.join(__dirname, 'public/images')));
 
     // Fallback: Let Next.js handle all remaining routes
     server.all(/.*/, (req, res) => {
@@ -55,5 +67,5 @@ app.prepare()
   })
   .catch((err) => {
     console.error('Error during app preparation:', err);
-    process.exit(1);
+    process.exit(1); // Exit the process on failure
   });

@@ -11,7 +11,6 @@ const EnquiryForm = () => {
     eventType: "",
     eventDetails: "",
   });
-
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -66,7 +65,6 @@ const EnquiryForm = () => {
 
     try {
       await submitEnquiry(formData);
-
       setFormData({
         fullName: "",
         email: "",
@@ -74,7 +72,6 @@ const EnquiryForm = () => {
         eventType: "",
         eventDetails: "",
       });
-
       toast.success("Thanks For Submitting Enquiry!", { id: toastId });
     } catch (error) {
       console.error("Error submitting form:", error);

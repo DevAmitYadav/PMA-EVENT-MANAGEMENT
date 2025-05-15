@@ -13,7 +13,7 @@ export const createTestimonial = async (req, res) => {
     const testimonial = await Testimonial.create({
       text,
       author,
-      image: `/uploads/${image}`,
+      image: `/${image}`,
     });
 
     res.status(201).json({

@@ -7,3 +7,4 @@ router.post('/enquiries', createEnquiry);
 router.get('/enquiries', getEnquiries);
 
 export default router;
+        

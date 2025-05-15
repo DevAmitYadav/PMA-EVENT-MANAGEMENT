@@ -31,3 +31,18 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #b79e71;
+  border-radius: 8px;
+}
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #b79e71 transparent;
+}
