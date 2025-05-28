@@ -1,17 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateEnquiry } from "@/lib/api/enquiryApi";
 import { toast } from "sonner";
 
 export default function EditModal({ enquiry, onClose, refresh }) {
+  // Prevent initialization errors by using a safe fallback object
+  const safeEnquiry = enquiry || {};
+
   const [formData, setFormData] = useState({
-    fullName: enquiry.fullName || "",
-    email: enquiry.email || "",
-    phone: enquiry.phone || "",
-    eventDetails: enquiry.eventDetails || "" // Use eventDetails consistently
+    fullName: safeEnquiry.fullName || "",
+    email: safeEnquiry.email || "",
+    phone: safeEnquiry.phone || "",
+    eventDetails: safeEnquiry.eventDetails || "",
   });
+
   const [loading, setLoading] = useState(false);
+
+  // Optional: useEffect to update formData if enquiry changes
+  useEffect(() => {
+    if (enquiry) {
+      setFormData({
+        fullName: enquiry.fullName || "",
+        email: enquiry.email || "",
+        phone: enquiry.phone || "",
+        eventDetails: enquiry.eventDetails || "",
+      });
+    }
+  }, [enquiry]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -34,6 +50,11 @@ export default function EditModal({ enquiry, onClose, refresh }) {
       setLoading(false);
     }
   };
+
+  // Don’t render if enquiry is not available
+  if (!enquiry) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -73,7 +94,6 @@ export default function EditModal({ enquiry, onClose, refresh }) {
               required
             />
           </div>
-          {/* Updated field: now using eventDetails */}
           <div>
             <label className="block text-sm font-medium">Message</label>
             <textarea
