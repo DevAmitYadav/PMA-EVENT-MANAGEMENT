@@ -32,6 +32,11 @@ app.prepare()
       next();
     });
 
+    server.get('/', (req, res) => {
+    res.send('Event Management API is running!');
+      });
+
+
     // Middleware to parse JSON bodies
     server.use(express.json());
 

@@ -14,7 +14,8 @@ const TestimonialCarousel = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/testimonials");
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const response = await fetch(`${API_URL}/api/testimonials`);
         if (!response.ok) {
           throw new Error("Failed to fetch testimonials");
         }
@@ -96,14 +97,13 @@ const TestimonialCarousel = () => {
     <div className="flex justify-center items-center min-h-[50vh] bg-gradient-to-br from-[#FAF9F8] to-[#E0E4E8] py-4">
       <div className="max-w-7xl w-full p-1 bg-gradient-to-br from-[#F0F4F8] to-[#FAF9F8] rounded-md shadow-2xl">
         <div className="relative bg-[#FAF9F8] rounded-md px-4 sm:px-8 py-6 flex flex-col items-center justify-center space-y-4 overflow">
-          
           {/* Profile Image */}
           <div className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 rounded-full w-16 h-16 sm:w-20 sm:h-20 border-2 border-white shadow-xl bg-white overflow-hidden">
             <Image
               alt="Testimonial"
               src={
                 image
-                  ? `http://localhost:5000/images/testimonial/${image}`
+                  ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/images/testimonial/${image}`
                   : "/frontend/images/fallback.jpg"
               }
               width={80}

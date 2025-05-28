@@ -22,6 +22,7 @@ import { motion, AnimatePresence } from "framer-motion"; // Import motion and An
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter); // Extend dayjs with the plugin
 
+
 const typeIcons = {
   "wedding event": <FaRing className="text-pink-400 mr-2" />,
   birthday: <FaBirthdayCake className="text-yellow-400 mr-2" />,
@@ -318,7 +319,9 @@ const EnhancedEventCalendar = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/events");
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+        const res = await fetch(`${baseUrl}/api/events`);
+        console.log("Fetching events from:", `${baseUrl}/api/events`);
         if (!res.ok) {
           throw new Error(
             `Failed to fetch events: ${res.status} ${res.statusText}`

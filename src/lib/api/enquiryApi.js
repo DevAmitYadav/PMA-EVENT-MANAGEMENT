@@ -1,6 +1,5 @@
-// src/lib/api/enquiryApi.js
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/enquiries';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = `${BASE_URL}/api/enquiries`;
 
 // Function to handle API responses and throw errors
 const handleResponse = async (response) => {
@@ -21,7 +20,7 @@ const handleResponse = async (response) => {
 // Function to create an enquiry
 export const submitEnquiry = async (enquiryData) => {
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,20 +30,20 @@ export const submitEnquiry = async (enquiryData) => {
     return await handleResponse(response);
   } catch (error) {
     console.error('Error submitting enquiry:', error);
-    throw error; // Re-throw for component-level handling
+    throw error;
   }
 };
 
 // Function to get all enquiries
 export const getEnquiries = async () => {
   try {
-    const response = await fetch(API_URL, {
-      next: { revalidate: 60 }, // Example: Revalidate every 60 seconds
+    const response = await fetch(`${API_URL}`, {
+      next: { revalidate: 60 },
     });
     return await handleResponse(response);
   } catch (error) {
     console.error('Error fetching enquiries:', error);
-    throw error; // Re-throw for component-level handling
+    throw error;
   }
 };
 
@@ -52,12 +51,12 @@ export const getEnquiries = async () => {
 export const getEnquiryById = async (id) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
-      next: { revalidate: 60 }, // Example: Revalidate every 60 seconds
+      next: { revalidate: 60 },
     });
     return await handleResponse(response);
   } catch (error) {
     console.error('Error fetching enquiry by ID:', error);
-    throw error; // Re-throw for component-level handling
+    throw error;
   }
 };
 
@@ -65,7 +64,7 @@ export const getEnquiryById = async (id) => {
 export const updateEnquiry = async (id, enquiryData) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
-      method: 'PUT', // Or PATCH if you are doing partial updates
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -74,7 +73,7 @@ export const updateEnquiry = async (id, enquiryData) => {
     return await handleResponse(response);
   } catch (error) {
     console.error('Error updating enquiry:', error);
-    throw error; // Re-throw for component-level handling
+    throw error;
   }
 };
 
@@ -87,6 +86,6 @@ export const deleteEnquiry = async (id) => {
     return await handleResponse(response);
   } catch (error) {
     console.error('Error deleting enquiry:', error);
-    throw error; // Re-throw for component-level handling
+    throw error;
   }
 };
