@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter"; // Import the plugin
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -19,6 +20,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
 
 dayjs.extend(utc);
+dayjs.extend(isSameOrAfter); // Extend dayjs with the plugin
 
 const typeIcons = {
   "wedding event": <FaRing className="text-pink-400 mr-2" />,
@@ -65,7 +67,15 @@ const CalendarHeader = ({ currentDate, onMonthChange }) => {
   );
 };
 
-const EventList = ({ events, selectedDate, eventFilter, typeIcons, onBookEvent, onEventClick, loading }) => {
+const EventList = ({
+  events,
+  selectedDate,
+  eventFilter,
+  typeIcons,
+  onBookEvent,
+  onEventClick,
+  loading,
+}) => {
   const key = selectedDate.format("YYYY-MM-DD");
 
   const filteredEvents = useMemo(() => {
@@ -75,6 +85,8 @@ const EventList = ({ events, selectedDate, eventFilter, typeIcons, onBookEvent, 
       return (events[key] || []).filter((event) => event.type === eventFilter);
     }
   }, [events, key, eventFilter]);
+
+  const isTodayOrFutureDate = selectedDate.isSameOrAfter(dayjs(), "day");
 
   if (loading) {
     return (
@@ -88,19 +100,25 @@ const EventList = ({ events, selectedDate, eventFilter, typeIcons, onBookEvent, 
   if (filteredEvents.length === 0) {
     return (
       <div className="mt-4 text-center">
-        <p className="text-gray-400 italic">No events scheduled for this date.</p>
-        <div className="mt-6">
-          <BookEventButton onBookEvent={onBookEvent} />
-        </div>
+        <p className="text-gray-400 italic">
+          No events scheduled for this date.
+        </p>
+        {isTodayOrFutureDate && (
+          <div className="mt-6">
+            <BookEventButton onBookEvent={onBookEvent} />
+          </div>
+        )}
       </div>
     );
   }
 
   return (
     <div className="mt-4">
-      <div className="flex justify-end">
-        <BookEventButton onBookEvent={onBookEvent} />
-      </div>
+      {isTodayOrFutureDate && (
+        <div className="flex justify-end">
+          <BookEventButton onBookEvent={onBookEvent} />
+        </div>
+      )}
       <div className="mt-4 grid gap-4" role="list">
         {filteredEvents.map((event, idx) => (
           <article
@@ -112,7 +130,11 @@ const EventList = ({ events, selectedDate, eventFilter, typeIcons, onBookEvent, 
             onClick={() => onEventClick(event)} // Open modal on click
           >
             <Image
-              src={event.image || "/frontend/images/fallback.jpg"}
+              src={
+                event.image?.startsWith("http")
+                  ? event.image
+                  : `/frontend/images/fallback.jpg`
+              }
               alt={event.title}
               width={64}
               height={64}
@@ -142,8 +164,7 @@ const BookEventButton = ({ onBookEvent }) => {
     (e) => {
       e.preventDefault();
       setNavLoading(true);
-      onBookEvent()
-        .finally(() => setNavLoading(false)); // Reset loading state after navigation
+      onBookEvent().finally(() => setNavLoading(false)); // Reset loading state after navigation
     },
     [onBookEvent]
   );
@@ -191,15 +212,23 @@ const EventModal = ({ isOpen, onClose, event, typeIcons }) => {
   if (!isOpen || !event) return null;
 
   // Fallback color if event type is unknown
-  const eventColor =
-    colorMap[event.type] || "bg-gray-100 text-gray-800";
+  const eventColor = colorMap[event.type] || "bg-gray-100 text-gray-800";
 
   const fields = [
     { label: "Type", value: event.type },
     { label: "Date", value: dayjs(event.date).format("MMMM D, YYYY h:mm A") },
-    { label: "Description", value: event.description || "No description provided." },
-    { label: "Created", value: dayjs(event.createdAt).format("MMMM D, YYYY h:mm A") },
-    { label: "Updated", value: dayjs(event.updatedAt).format("MMMM D, YYYY h:mm A") },
+    {
+      label: "Description",
+      value: event.description || "No description provided.",
+    },
+    {
+      label: "Created",
+      value: dayjs(event.createdAt).format("MMMM D, YYYY h:mm A"),
+    },
+    {
+      label: "Updated",
+      value: dayjs(event.updatedAt).format("MMMM D, YYYY h:mm A"),
+    },
   ];
 
   return (
@@ -233,7 +262,11 @@ const EventModal = ({ isOpen, onClose, event, typeIcons }) => {
             {/* ▶ Image + Title Section */}
             <div className="relative p-5 md:p-6 bg-gray-50 border-r border-gray-200 flex flex-col gap-4">
               <Image
-                src={event.image || "/frontend/images/fallback.jpg"}
+                src={
+                  event.image?.startsWith("http")
+                    ? event.image
+                    : `/frontend/images/fallback.jpg`
+                }
                 alt={event.title}
                 width={500}
                 height={400}
@@ -270,7 +303,6 @@ const EventModal = ({ isOpen, onClose, event, typeIcons }) => {
   );
 };
 
-
 const EnhancedEventCalendar = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -288,7 +320,9 @@ const EnhancedEventCalendar = () => {
       try {
         const res = await fetch("http://localhost:5000/api/events");
         if (!res.ok) {
-          throw new Error(`Failed to fetch events: ${res.status} ${res.statusText}`);
+          throw new Error(
+            `Failed to fetch events: ${res.status} ${res.statusText}`
+          );
         }
         const data = await res.json();
         const eventsMap = data.events.reduce((acc, event) => {
@@ -353,7 +387,9 @@ const EnhancedEventCalendar = () => {
     <main className="min-h-screen py-10 px-4 bg-gradient-to-b from-[#0B2340] to-[#0A153B] text-white font-serif">
       <div className="max-w-6xl mx-auto">
         <header className="mb-10 text-center">
-          <p className="tracking-wide text-sm font-semibold uppercase">Elegant Moments</p>
+          <p className="tracking-wide text-sm font-semibold uppercase">
+            Elegant Moments
+          </p>
           <h2 className="mt-2 text-4xl font-bold">Event Calendar</h2>
           <p className="mt-2 max-w-md mx-auto text-gray-300">
             Browse your special moments by selecting a date on the calendar.
@@ -369,7 +405,10 @@ const EnhancedEventCalendar = () => {
         <div className="flex flex-col gap-10 md:flex-row">
           {/* Calendar Section */}
           <section className="w-full md:w-1/3 rounded-lg bg-white/10 p-6 shadow-lg backdrop-blur-md">
-            <CalendarHeader currentDate={currentDate} onMonthChange={handleMonthChange} />
+            <CalendarHeader
+              currentDate={currentDate}
+              onMonthChange={handleMonthChange}
+            />
 
             <div className="mb-1 grid grid-cols-7 gap-1 text-sm font-medium text-gray-300">
               {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
@@ -390,7 +429,9 @@ const EnhancedEventCalendar = () => {
                   <div
                     key={i}
                     onClick={() => day && handleDateSelect(day)}
-                    onKeyDown={(e) => e.key === "Enter" && day && handleDateSelect(day)}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && day && handleDateSelect(day)
+                    }
                     tabIndex={day ? 0 : -1}
                     role="gridcell"
                     aria-label={`Day ${day ? day.date() : ""} with ${eventCount || 0} events`}
@@ -426,7 +467,10 @@ const EnhancedEventCalendar = () => {
 
               {/* ▼ Filter Dropdown */}
               <div className="text-sm flex items-center">
-                <label htmlFor="eventFilter" className="mr-2 text-gray-300 font-medium flex items-center">
+                <label
+                  htmlFor="eventFilter"
+                  className="mr-2 text-gray-300 font-medium flex items-center"
+                >
                   <FaFilter className="mr-1" />
                   Filter:
                 </label>
@@ -438,13 +482,20 @@ const EnhancedEventCalendar = () => {
                     className="appearance-none bg-white text-gray-700 border border-gray-300 px-3 py-1 rounded leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500 pr-8" // Modern UI dropdown
                   >
                     {eventTypeOptions.map((option) => (
-                      <option key={option.value} value={option.value} className="text-black">
+                      <option
+                        key={option.value}
+                        value={option.value}
+                        className="text-black"
+                      >
                         {option.label}
                       </option>
                     ))}
                   </select>
                   <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                    <svg className="w-4 h-4 fill-current text-gray-700" viewBox="0 0 20 20">
+                    <svg
+                      className="w-4 h-4 fill-current text-gray-700"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                     </svg>
                   </div>
@@ -462,7 +513,12 @@ const EnhancedEventCalendar = () => {
             />
           </section>
         </div>
-        <EventModal isOpen={isModalOpen} onClose={handleCloseModal} event={selectedEvent} typeIcons={typeIcons} />
+        <EventModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          event={selectedEvent}
+          typeIcons={typeIcons}
+        />
       </div>
     </main>
   );

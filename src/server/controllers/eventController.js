@@ -54,7 +54,7 @@ export const createEvent = (req, res) => {
       return res.status(400).json({ error: 'Missing required fields or invalid date' });
     }
 
-    const imageUrl = req.file ? `/images/eventImages/${req.file.filename}` : null;
+    const imageUrl = req.file ? `/${req.file.filename}` : null;
 
     try {
       const newEvent = new Event({
