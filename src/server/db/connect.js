@@ -1,14 +1,14 @@
-// server/db/connect.js
 
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
+    if(mongoose.connection.readyState === 1){
+      console.log("Already Connected");
+      return;
+    }
     // Attempt to connect to MongoDB using the connection string from environment variables
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(process.env.MONGO_URI);
 
     // Log a success message if connection is successful
     console.log(`🌍 MongoDB Connected: ${conn.connection.host}`);  // Conn host can give info on the cluster if using Atlas

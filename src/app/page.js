@@ -16,6 +16,7 @@ import ServicesPage from './ui/services/page';
 import Portfolios from './ui/portfolio/page';
 import UpcomingEvents from './ui/eventscalendar/page';
 import { Toaster } from 'sonner';
+import OurExperts from './ui/ourexperts/page';
 
 export default function Home() {
   return (
@@ -32,9 +33,11 @@ export default function Home() {
         <section id="services" className="scroll-mt-16"><ServicesPage /></section>
         <section id="howitworks" className="scroll-mt-16"><WorkingProcess /></section>
         <section id="testimonials" className="scroll-mt-16"><TestimonialCarousel /></section>
+        <section id="expert" className="scroll-mt-16"><OurExperts /></section>  
         {/* <section id="blog" className="scroll-mt-16"><BlogArticles /></section> */}
         <section id="calendar" className="scroll-mt-16"><UpcomingEvents /></section>
         <section id="contact" className="scroll-mt-16"><EnquiryForm /></section>
+
       </main>
       <Footer />
     </>

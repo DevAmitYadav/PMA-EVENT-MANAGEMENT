@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useCallback, memo } from "react";
+import React, { useState, useCallback, memo, useEffect, useRef } from "react";
 import Image from "next/image";
 
 // Static services data defined at the module level.
-// Ensure the images are in the /public/images folder.
+// Ensure the images are in the /public/frontend/images folder.
 const services = [
   {
     title: "Event Planning",
@@ -162,6 +162,27 @@ const ServiceModal = memo(({ service, onClose }) => (
 // Main ServicesPage Component.
 const ServicesPage = () => {
   const [selectedService, setSelectedService] = useState(null);
+  const scrollYRef = useRef(0);
+
+  // Lock the background scroll and preserve the scroll position when the modal is open.
+  useEffect(() => {
+    if (selectedService) {
+      // Store the current scroll position.
+      scrollYRef.current = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.width = "100%";
+    } else {
+      // Restore the scroll position when the modal is closed.
+      document.body.style.position = "";
+      document.body.style.top = "";
+      window.scrollTo(0, scrollYRef.current);
+    }
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+    };
+  }, [selectedService]);
 
   const handleLearnMore = useCallback((service) => {
     setSelectedService(service);

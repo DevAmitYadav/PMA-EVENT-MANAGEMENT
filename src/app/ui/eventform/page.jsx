@@ -9,7 +9,20 @@ import {
   FaRegStickyNote,
   FaImage,
 } from "react-icons/fa";
-import { toast, Toaster } from "sonner"; // Import Sonner for toast notifications
+import { toast, Toaster } from "sonner";
+
+// FadeTransition helper component
+const FadeTransition = ({ children, animateKey }) => {
+  return (
+    <div
+      key={animateKey}
+      className="transition-opacity duration-500 ease-in-out"
+      style={{ opacity: 0, animation: "fadeIn 0.5s forwards" }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const EventForm = () => {
   const [form, setForm] = useState({
@@ -76,122 +89,142 @@ const EventForm = () => {
   };
 
   return (
-    <section className="max-w-4xl mx-auto p-8 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-20">
-      <Toaster position="top-center" richColors /> {/* Toast notifications container */}
-      
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
-        Share an Event
-      </h2>
+    <>
+      {/* CSS for the fadeIn animation */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+      `}</style>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Row 1: Title and Type Side-by-Side */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
-              <FaTags />
-              Event Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={form.title}
-              onChange={handleChange}
-              placeholder="Enter event title"
-              required
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
-            />
-          </div>
-          <div>
-            <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
-              <FaList />
-              Event Type
-            </label>
-            <select
-              name="type"
-              value={form.type}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
-            >
-              <option value="">Select Event Type</option>
-              <option value="wedding event">Wedding Event</option>
-              <option value="birthday event">Birthday Event</option>
-              <option value="corporate event">Corporate Event</option>
-            </select>
-          </div>
-        </div>
+      <section className="max-w-4xl mx-auto p-8 bg-white dark:bg-gray-800 rounded-xl shadow-md mt-20">
+        <Toaster position="top-center" richColors /> {/* Toast notifications container */}
+        
+        <FadeTransition animateKey={"eventForm"}>
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">
+            Share an Event
+          </h2>
 
-        {/* Row 2: Event Date and Image Side-by-Side */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Event Date */}
-          <div>
-            <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
-              <FaCalendarAlt />
-              Event Date
-            </label>
-            <input
-              type="date"
-              name="date"
-              value={form.date}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
-            />
-          </div>
-          {/* Event Image */}
-          <div>
-            <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
-              <FaImage />
-              Event Image
-            </label>
-            <div
-              {...getRootProps()}
-              className="w-full px-4 py-4 border-2 border-dashed border-gray-300 rounded-md cursor-pointer dark:border-gray-600 text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-900"
-            >
-              <input {...getInputProps()} />
-              <p className="text-center">
-                {isDragActive
-                  ? "Drop the image here..."
-                  : form.image
-                  ? form.image.name
-                  : "Drag & drop image or click to select"}
-              </p>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Row 1: Title and Type Side-by-Side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
+                  <FaTags />
+                  Event Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  placeholder="Enter event title"
+                  required
+                  className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
+                />
+              </div>
+              <div>
+                <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
+                  <FaList />
+                  Event Type
+                </label>
+                <select
+                  name="type"
+                  value={form.type}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
+                >
+                  <option value="">Select Event Type</option>
+                  <option value="wedding event">Wedding Event</option>
+                  <option value="birthday event">Birthday Event</option>
+                  <option value="corporate event">Corporate Event</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Row 3: Event Description full-width */}
-        <div>
-          <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
-            <FaRegStickyNote />
-            Event Description
-          </label>
-          <textarea
-            name="description"
-            rows="4"
-            value={form.description}
-            onChange={handleChange}
-            placeholder="Describe the event..."
-            required
-            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
-          ></textarea>
-        </div>
+            {/* Row 2: Event Date and Image Side-by-Side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Event Date */}
+              <div>
+                <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
+                  <FaCalendarAlt />
+                  Event Date
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  value={form.date}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
+                />
+              </div>
+              {/* Event Image */}
+              <div>
+                <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
+                  <FaImage />
+                  Event Image
+                </label>
+                <div
+                  {...getRootProps()}
+                  className="w-full px-4 py-4 border-2 border-dashed border-gray-300 rounded-md cursor-pointer dark:border-gray-600 text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-900"
+                >
+                  <input {...getInputProps()} />
+                  <p className="text-center">
+                    {isDragActive
+                      ? "Drop the image here..."
+                      : form.image
+                      ? form.image.name
+                      : "Drag & drop image or click to select"}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-        {/* Error Message (if any) */}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+            {/* Row 3: Event Description full-width */}
+            <div>
+              <label className="flex items-center gap-2 text-gray-700 dark:text-gray-200 mb-1">
+                <FaRegStickyNote />
+                Event Description
+              </label>
+              <textarea
+                name="description"
+                rows="4"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Describe the event..."
+                required
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black dark:bg-gray-900 dark:text-white dark:border-gray-600"
+              ></textarea>
+            </div>
 
-        {/* Row 4: Submit Button */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-2 text-white bg-black rounded-md hover:bg-gray-800 transition"
-          >
-            {loading ? "Submitting..." : "Submit"}
-          </button>
-        </div>
-      </form>
-    </section>
+            {/* Error Message (if any) with fade animation */}
+            {error && (
+              <FadeTransition animateKey={error}>
+                <p className="text-red-500 text-sm">{error}</p>
+              </FadeTransition>
+            )}
+
+            {/* Row 4: Submit Button */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-2 text-white bg-black rounded-md hover:bg-gray-800 transition"
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </button>
+            </div>
+          </form>
+        </FadeTransition>
+      </section>
+    </>
   );
 };
 

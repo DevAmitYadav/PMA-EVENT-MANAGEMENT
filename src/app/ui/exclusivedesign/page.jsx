@@ -1,8 +1,9 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 
-// Subcomponent for the Video Section
+// Video Section Component
 const VideoSection = () => (
   <div className="w-full md:w-1/2 flex justify-center items-center">
     <video
@@ -11,13 +12,15 @@ const VideoSection = () => (
       loop
       muted
       playsInline
+      controls={false}
+      preload="auto"
       className="rounded-lg w-full max-w-md h-auto object-cover"
       aria-label="Wedding video presentation"
     />
   </div>
 );
 
-// Subcomponent for the Content Section
+// Content Section Component
 const ContentSection = () => (
   <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-16 space-y-6">
     <p className="text-[10px] text-[#2C3E50] uppercase tracking-widest font-semibold mb-3">
@@ -29,15 +32,14 @@ const ContentSection = () => (
     <Image
       src="/frontend/images/floral.jpg"
       alt="Floral Divider"
-      width={80}
-      height={20}
+      width={80}    // Desired width in px
+      height={20}   // Height calculated to keep aspect ratio (assuming original is 4:1 ratio)
       className="mb-6"
       priority
+      sizes="80px"
     />
     <p className="text-sm text-[#3A3A3A] mb-10 max-w-md leading-relaxed">
-      The floristry business has a significant market in the corporate and
-      social event world, as flowers play a large part in the decor of special
-      events and meetings.
+      The floristry business has a significant market in the corporate and social event world, as flowers play a large part in the decor of special events and meetings.
     </p>
     <button
       type="button"
@@ -49,15 +51,13 @@ const ContentSection = () => (
 );
 
 // Main Exclusive Design Component
-const ExclusiveDesign = () => {
-  return (
-    <section className="bg-[#FAF9F8] font-['Playfair_Display'] w-full">
-      <div className="flex flex-col md:flex-row w-full mx-0 md:mx-auto space-y-6 md:space-y-0 md:space-x-6 bg-white p-6 rounded-lg shadow-lg relative">
-        <VideoSection />
-        <ContentSection />
-      </div>
-    </section>
-  );
-};
+const ExclusiveDesign = () => (
+  <section className="bg-[#FAF9F8] font-['Playfair_Display'] w-full">
+    <div className="flex flex-col md:flex-row w-full mx-0 md:mx-auto space-y-6 md:space-y-0 md:space-x-6 bg-white p-6 rounded-lg shadow-lg relative">
+      <VideoSection />
+      <ContentSection />
+    </div>
+  </section>
+);
 
 export default React.memo(ExclusiveDesign);

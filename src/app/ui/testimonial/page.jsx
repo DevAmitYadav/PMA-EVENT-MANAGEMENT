@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,12 +15,10 @@ const TestimonialCarousel = () => {
     const fetchTestimonials = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/testimonials");
-        console.log(response);
         if (!response.ok) {
           throw new Error("Failed to fetch testimonials");
         }
         const data = await response.json();
-        console.log(data);
         setTestimonials(data);
       } catch (error) {
         setError("Error fetching testimonials: " + error.message);
@@ -42,18 +41,19 @@ const TestimonialCarousel = () => {
     );
   };
 
-  // Autoplay effect: Move to the next testimonial every 5 seconds.
+  // Autoplay effect
   useEffect(() => {
     if (testimonials.length > 0) {
       const intervalId = setInterval(() => {
         setCurrentTestimonial((prevIndex) =>
           (prevIndex + 1) % testimonials.length
         );
-      }, 5000); // Change slide every 5 seconds.
+      }, 5000);
       return () => clearInterval(intervalId);
     }
   }, [testimonials]);
 
+  // Loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
@@ -62,6 +62,7 @@ const TestimonialCarousel = () => {
     );
   }
 
+  // Error state
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-[50vh]">
@@ -70,23 +71,50 @@ const TestimonialCarousel = () => {
     );
   }
 
-  const { text, author, image } = testimonials[currentTestimonial];
+  // No testimonials state
+  if (!loading && testimonials.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <p className="text-[#2C3E50] text-base">No testimonials found.</p>
+      </div>
+    );
+  }
+
+  const testimonial = testimonials[currentTestimonial];
+
+  if (!testimonial) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <p className="text-[#2C3E50] text-base">Invalid testimonial data.</p>
+      </div>
+    );
+  }
+
+  const { text, author, image } = testimonial;
 
   return (
     <div className="flex justify-center items-center min-h-[50vh] bg-gradient-to-br from-[#FAF9F8] to-[#E0E4E8] py-4">
-      {/* Wrapper with gradient border for extra 'bit depth' */}
       <div className="max-w-7xl w-full p-1 bg-gradient-to-br from-[#F0F4F8] to-[#FAF9F8] rounded-md shadow-2xl">
         <div className="relative bg-[#FAF9F8] rounded-md px-4 sm:px-8 py-6 flex flex-col items-center justify-center space-y-4 overflow">
           
-          {/* Profile Image with stronger shadow */}
-          <img
-            alt="Testimonial"
-            src={`http://localhost:5000/images/testimonial/${image}`}
-            className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 rounded-full w-16 h-16 sm:w-20 sm:h-20 object-cover border-2 border-white shadow-xl"
-            onError={(e) => {
-              e.target.src = "/default-user.png"; // Fallback to a default image if not found
-            }}
-          />
+          {/* Profile Image */}
+          <div className="absolute -top-8 sm:-top-10 left-1/2 transform -translate-x-1/2 rounded-full w-16 h-16 sm:w-20 sm:h-20 border-2 border-white shadow-xl bg-white overflow-hidden">
+            <Image
+              alt="Testimonial"
+              src={
+                image
+                  ? `http://localhost:5000/images/testimonial/${image}`
+                  : "/frontend/images/fallback.jpg"
+              }
+              width={80}
+              height={80}
+              className="rounded-full object-cover w-full h-full"
+              onError={(e) => {
+                e.target.src = "/frontend/images.jpg";
+              }}
+              unoptimized // Remove if you want Next.js to optimize remote images and you have set up domains in next.config.js
+            />
+          </div>
 
           {/* Previous Button */}
           <button

@@ -22,7 +22,7 @@ app.prepare()
 
     // ✅ Enable CORS before any routes
     server.use(cors({
-      origin: 'http://localhost:3000',
+      origin: '*',
       credentials: true // optional, only if using cookies/auth headers
     }));
 

@@ -12,7 +12,7 @@ const navLinks = [
   { name: "Services", href: "#services" },
   { name: "How It Works", href: "#howitworks" },
   { name: "Testimonials", href: "#testimonials" },
-  { name: "Blog", href: "#blog" },
+  { name: "Our Expert", href: "#expert" },
   { name: "Calendar", href: "#calendar" },
   { name: "Contact", href: "#contact" },
 ];

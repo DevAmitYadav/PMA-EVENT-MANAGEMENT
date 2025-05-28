@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 
@@ -12,8 +13,9 @@ const WeddingUpdates = () => {
 
   return (
     <>
-      {/* Header Section (currently commented out) */}
-      {/* <div className="bg-[#2C3E50] flex flex-col md:flex-row items-center justify-center gap-6 py-6 px-4 md:px-20">
+      {/* Optional Header Section (Uncomment if needed) */}
+      {/*
+      <div className="bg-[#2C3E50] flex flex-col md:flex-row items-center justify-center gap-6 py-6 px-4 md:px-20">
         <h2 className="text-white font-[Pacifico] text-xl md:text-2xl font-semibold italic whitespace-nowrap">
           Stay Tuned with Updates!
         </h2>
@@ -27,8 +29,9 @@ const WeddingUpdates = () => {
           <input
             type="email"
             id="email"
-            placeholder=""
+            placeholder="you@example.com"
             className="flex-grow border-b border-white bg-transparent text-white text-sm placeholder:text-white focus:outline-none"
+            required
           />
           <button
             type="submit"
@@ -37,7 +40,8 @@ const WeddingUpdates = () => {
             SUBMIT
           </button>
         </form>
-      </div> */}
+      </div>
+      */}
 
       {/* Image Gallery */}
       <div className="flex flex-wrap">
@@ -51,7 +55,8 @@ const WeddingUpdates = () => {
               alt={`Wedding image ${idx + 1}`}
               fill
               className="object-cover"
-              priority={idx === 0} // Preload the first image if needed
+              priority={idx === 0} // Preload only the first image for performance
+              sizes="(max-width: 768px) 50vw, 25vw"
             />
           </div>
         ))}

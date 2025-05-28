@@ -75,7 +75,7 @@ const EnquiryForm = () => {
       toast.success("Thanks For Submitting Enquiry!", { id: toastId });
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Something went wrong, please try again.", { id: toastId });
+      toast.error(error.message || "Something went wrong, please try again.", { id: toastId }); // Use the error message from the API
     } finally {
       setIsSubmitting(false);
     }

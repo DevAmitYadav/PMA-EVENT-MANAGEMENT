@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
-// Carousel data – ensure these assets exist or update paths accordingly.
 const carouselItems = [
   {
     type: "image",
@@ -20,9 +19,7 @@ const carouselItems = [
   },
 ];
 
-// --------------------------
-// Text Column Subcomponent
-// --------------------------
+// Text Column
 const WeddingTextColumn = () => (
   <section className="max-w-xl z-10">
     <p className="text-xs text-[#2C3E50] font-semibold tracking-widest mb-3 uppercase">
@@ -33,14 +30,19 @@ const WeddingTextColumn = () => (
       <br />
       That Capture the Imagination
     </h1>
-    <Image
-      src="/frontend/images/floral.jpg"
-      alt="Floral Divider"
-      width={80}
-      height={20}
-      className="mb-6"
-      priority
-    />
+
+    {/* Fixed floral image */}
+    <div style={{ width: 80, height: 20, position: "relative" }} className="mb-6">
+      <Image
+        src="/frontend/images/floral.jpg"
+        alt="Floral Divider"
+        fill
+        style={{ objectFit: "contain" }}
+        priority
+        quality={100}
+      />
+    </div>
+
     <p className="text-sm text-[#2C3E50] leading-relaxed mb-10">
       Weddings are significant events in people’s lives, and as such,
       couples are often willing to spend a considerable amount to ensure
@@ -57,20 +59,17 @@ const WeddingTextColumn = () => (
   </section>
 );
 
-// --------------------------
-// Carousel Subcomponent
-// --------------------------
+// Carousel with fade effect
 const CarouselSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(false);
   const intervalRef = useRef(null);
 
-  // Auto slide logic with fade transition
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setFade(true);
       setTimeout(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
+        setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
         setFade(false);
       }, 300);
     }, 5000);
@@ -82,17 +81,22 @@ const CarouselSection = () => {
     <section
       id="carousel"
       className="relative w-full max-w-md md:max-w-lg lg:max-w-xl border border-[#ECECEC] shadow-md overflow-hidden rounded-md z-10"
+      aria-label="Wedding images and videos carousel"
     >
-      <div className="w-full h-[400px]">
+      <div className="relative w-full h-[400px]">
         {carouselItems[currentIndex].type === "image" ? (
           <Image
             key={currentIndex}
             alt={carouselItems[currentIndex].alt || ""}
             src={carouselItems[currentIndex].src}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className={`object-cover transition-opacity duration-500 ease-in-out ${
               fade ? "opacity-0" : "opacity-100"
             }`}
+            quality={100}
+            priority={currentIndex === 0}
+            unoptimized={false}
           />
         ) : (
           <video
@@ -111,9 +115,11 @@ const CarouselSection = () => {
       {/* Dots Indicator */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
         {carouselItems.map((_, index) => (
-          <div
+          <button
             key={index}
-            className={`w-2 h-2 rounded-full ${
+            aria-label={`Go to slide ${index + 1}`}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-3 h-3 rounded-full focus:outline-none focus:ring-2 focus:ring-white ${
               index === currentIndex ? "bg-white" : "bg-gray-400"
             }`}
           />
@@ -123,29 +129,27 @@ const CarouselSection = () => {
   );
 };
 
-// --------------------------
-// Main Component
-// --------------------------
-const WeddingIntro = () => {
-  return (
-    <div className="bg-[#FAF9F8] relative min-h-screen overflow-x-hidden">
-      {/* Background Decorative Image */}
-      <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none h-[600px]">
-        <Image
-          alt="Decorative floral border"
-          src="/frontend/images/byter34.jpg"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-
-      <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative pt-24 pb-[360px] md:pb-[280px] flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-24">
-        <WeddingTextColumn />
-        <CarouselSection />
-      </main>
+// Main component
+const WeddingIntro = () => (
+  <div className="bg-[#FAF9F8] relative min-h-screen overflow-x-hidden">
+    {/* Background Decorative Image */}
+    <div className="absolute bottom-0 left-0 w-full pointer-events-none select-none h-[600px]">
+      <Image
+        alt="Decorative floral border"
+        src="/frontend/images/byter34.jpg"
+        fill
+        sizes="100vw"
+        className="object-cover"
+        priority
+        quality={100}
+      />
     </div>
-  );
-};
+
+    <main className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative pt-24 pb-[360px] md:pb-[280px] flex flex-col md:flex-row items-center md:items-start gap-12 md:gap-24">
+      <WeddingTextColumn />
+      <CarouselSection />
+    </main>
+  </div>
+);
 
 export default WeddingIntro;

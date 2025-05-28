@@ -11,6 +11,7 @@ const handleResponse = async (response) => {
 
 export const getTestimonials = async () => {
   const response = await fetch(API_URL);
+  console.log("Response from API:", response);
   return handleResponse(response);
 };
 

@@ -165,16 +165,6 @@ const WorkingProcess = () => {
         })}
       </div>
 
-      {/* CTA Button */}
-      <div className="relative z-10 text-center mt-16">
-        <motion.button
-          className="bg-[#0f1f3d] text-white font-medium rounded-full px-8 py-3 shadow-md hover:shadow-lg hover:bg-[#1a2d50] transition duration-300"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.96 }}
-        >
-          Start Your Journey
-        </motion.button>
-      </div>
 
       {/* Glowing Animation */}
       <style>{`
